@@ -1,6 +1,23 @@
 # 简介
 
-> 本项目是基于大模型的智能对话机器人，支持企业微信、微信公众号、飞书、钉钉接入，可选择GPT3.5/GPT4.0/Claude/文心一言/讯飞星火/通义千问/Gemini/LinkAI/ChatGLM/KIMI，能处理文本、语音和图片，通过插件访问操作系统和互联网等外部资源，支持基于自有知识库定制企业AI应用。
+## AI康养微信机器人
+### 接口:
+#### 机器人主动发起对话:
+url: http://47.95.21.135:8088/startchat
+method: post
+params: {"user_id": "邵琦", "query": "hello"}
+请求示例:
+```python
+def test_chat():
+    url = "http://47.95.21.135:8088/startchat"
+    data = {"user_id": "邵琦", "query": "hello"}
+    response = requests.post(url, json=data)
+    print("Chat Response:", response.json())
+    return response.json()["response"]
+```
+>
+
+ 本项目是基于大模型的智能对话机器人，支持企业微信、微信公众号、飞书、钉钉接入，可选择GPT3.5/GPT4.0/Claude/文心一言/讯飞星火/通义千问/Gemini/LinkAI/ChatGLM/KIMI，能处理文本、语音和图片，通过插件访问操作系统和互联网等外部资源，支持基于自有知识库定制企业AI应用。
 
 最新版本支持的功能如下：
 
