@@ -171,6 +171,7 @@ class WechatChannel(ChatChannel):
     @time_checker
     @_check
     def handle_single(self, cmsg: ChatMessage):
+        # TODO: call DB
         # filter system message
         if cmsg.other_user_id in ["weixin"]:
             return
@@ -223,12 +224,13 @@ class WechatChannel(ChatChannel):
             if friend["RemarkName"] == remark_name:
                 return friend["UserName"]
         return ""
-
+    
     # 统一的发送函数，每个Channel自行实现，根据reply的type字段发送不同类型的消息
     def send(self, reply: Reply, context: Context):
         receiver = context["receiver"]
         remark_name = self.get_remark_name(receiver)
         print(f"remark_name={remark_name}")
+        # TODO: call DB
         if reply.type == ReplyType.TEXT:
             itchat.send(reply.content, toUserName=receiver)
             logger.info("[WX] sendMsg={}, receiver={}".format(reply, receiver))
