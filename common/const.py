@@ -1,6 +1,7 @@
 # bot_type
 OPEN_AI = "openAI"
 CHATGPT = "chatGPT"
+AIAGENT = 'aiagent'
 BAIDU = "baidu"
 XUNFEI = "xunfei"
 CHATGPTONAZURE = "chatGPTOnAzure"

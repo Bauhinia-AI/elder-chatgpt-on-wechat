@@ -111,6 +111,7 @@ class WechatChannel(ChatChannel):
         super().__init__()
         self.receivedMsgs = ExpiredDict(60 * 60)
         self.auto_login_times = 0
+        self.login = False
 
     def startup(self):
         try:
@@ -129,6 +130,11 @@ class WechatChannel(ChatChannel):
             self.user_id = itchat.instance.storageClass.userName
             self.name = itchat.instance.storageClass.nickName
             logger.info("Wechat login success, user_id: {}, nickname: {}".format(self.user_id, self.name))
+            self.login = True
+            # pull friends list 
+            friends = itchat.get_friends(update=True)
+            self.friends = friends
+            # print(self.friends)
             # start message listener
             itchat.run()
         except Exception as e:
@@ -205,10 +211,24 @@ class WechatChannel(ChatChannel):
         context = self._compose_context(cmsg.ctype, cmsg.content, isgroup=True, msg=cmsg)
         if context:
             self.produce(context)
+            
+    def get_remark_name(self, user_id):
+        for friend in self.friends:
+            if friend["UserName"] == user_id:
+                return friend["RemarkName"]
+        return ""
+    
+    def get_user_id(self, remark_name):
+        for friend in self.friends:
+            if friend["RemarkName"] == remark_name:
+                return friend["UserName"]
+        return ""
 
     # 统一的发送函数，每个Channel自行实现，根据reply的type字段发送不同类型的消息
     def send(self, reply: Reply, context: Context):
         receiver = context["receiver"]
+        remark_name = self.get_remark_name(receiver)
+        print(f"remark_name={remark_name}")
         if reply.type == ReplyType.TEXT:
             itchat.send(reply.content, toUserName=receiver)
             logger.info("[WX] sendMsg={}, receiver={}".format(reply, receiver))

@@ -11,12 +11,18 @@ def create_bot(bot_type):
     :param bot_type: bot type code
     :return: bot instance
     """
+    from bot.aiagent.aiagent_bot import AIAgentBot
+    return AIAgentBot()
     if bot_type == const.BAIDU:
         # 替换Baidu Unit为Baidu文心千帆对话接口
         # from bot.baidu.baidu_unit_bot import BaiduUnitBot
         # return BaiduUnitBot()
         from bot.baidu.baidu_wenxin import BaiduWenxinBot
         return BaiduWenxinBot()
+    elif bot_type == const.AIAGENT:
+        # AI Agent 机器人
+        from bot.aiagent.aiagent_bot import AIAgentBot
+        return AIAgentBot()
 
     elif bot_type == const.CHATGPT:
         # ChatGPT 网页端web接口

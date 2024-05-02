@@ -28,6 +28,12 @@ class Context:
         self.type = type
         self.content = content
         self.kwargs = kwargs
+    
+    def setUserId(self, user_id):
+        self.kwargs["user_id"] = user_id
+    
+    def getUserId(self):
+        return self.kwargs.get("user_id", None)
 
     def __contains__(self, key):
         if key == "type":
