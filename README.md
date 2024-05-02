@@ -4,8 +4,11 @@
 ### 接口:
 #### 机器人主动发起对话:
 url: http://47.95.21.135:8088/startchat
+
 method: post
+
 params: {"user_id": "邵琦", "query": "hello"}
+
 请求示例:
 ```python
 def test_chat():
