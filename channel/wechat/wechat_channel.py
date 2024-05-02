@@ -171,7 +171,8 @@ class WechatChannel(ChatChannel):
     @time_checker
     @_check
     def handle_single(self, cmsg: ChatMessage):
-        # TODO: call DB
+
+        
         # filter system message
         if cmsg.other_user_id in ["weixin"]:
             return
@@ -189,6 +190,10 @@ class WechatChannel(ChatChannel):
             logger.debug("[WX]receive msg: {}, cmsg={}".format(cmsg.content, cmsg))
         context = self._compose_context(cmsg.ctype, cmsg.content, isgroup=False, msg=cmsg)
         if context:
+            # update DB
+            remark_name = self.get_remark_name(cmsg.other_user_id)
+            self.update_chat_db(remark_name, False, cmsg.content)
+            print(f"remark_name={remark_name}, isbot=False, content={cmsg.content}")
             self.produce(context)
 
     @time_checker
@@ -225,12 +230,25 @@ class WechatChannel(ChatChannel):
                 return friend["UserName"]
         return ""
     
+    def update_chat_db(self, user_id, is_bot, content):
+        url = "http://47.95.21.135:8081/chatMessage/addChatMessage"
+        data = {
+    "remarkName": user_id,
+    "isBot": 1 if is_bot else 0,
+    "messageContent": content
+    }
+        headers = {'Content-Type': 'application/json'}
+        response = requests.post(url, data=json.dumps(data), headers=headers)
+        print(f"update_chat_db response={response}, user_id={user_id}, is_bot={is_bot}, content={content}")
+        
+    
     # 统一的发送函数，每个Channel自行实现，根据reply的type字段发送不同类型的消息
     def send(self, reply: Reply, context: Context):
         receiver = context["receiver"]
         remark_name = self.get_remark_name(receiver)
         print(f"remark_name={remark_name}")
-        # TODO: call DB
+        # update db
+        self.update_chat_db(remark_name, True, reply.content)
         if reply.type == ReplyType.TEXT:
             itchat.send(reply.content, toUserName=receiver)
             logger.info("[WX] sendMsg={}, receiver={}".format(reply, receiver))
