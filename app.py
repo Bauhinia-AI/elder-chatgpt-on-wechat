@@ -88,6 +88,14 @@ def run():
             os.environ["WECHATY_LOG"] = "warn"
 
         start_channel(channel_name)
+        # Create a separate thread to call update_friends() every 15 minutes
+        def update_friend_loop():
+            while True:
+                WechatChannel().update_friends()
+                time.sleep(15 * 60)  # Sleep for 15 minutes
+
+        update_friend_thread = threading.Thread(target=update_friend_loop)
+        update_friend_thread.start()
         while True:
             time.sleep(1)
     except Exception as e:

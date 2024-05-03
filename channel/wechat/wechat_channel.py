@@ -132,13 +132,16 @@ class WechatChannel(ChatChannel):
             logger.info("Wechat login success, user_id: {}, nickname: {}".format(self.user_id, self.name))
             self.login = True
             # pull friends list 
-            friends = itchat.get_friends(update=True)
-            self.friends = friends
+            self.update_friends()
             # print(self.friends)
             # start message listener
             itchat.run()
         except Exception as e:
             logger.error(e)
+    
+    def update_friends(self):
+        print("update friends")
+        self.friends = itchat.get_friends(update=True)
 
     def exitCallback(self):
         try:
