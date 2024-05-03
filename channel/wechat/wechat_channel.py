@@ -196,6 +196,7 @@ class WechatChannel(ChatChannel):
             # update DB
             remark_name = self.get_remark_name(cmsg.other_user_id)
             self.update_chat_db(remark_name, False, cmsg.content)
+            context.setRemarkName(remark_name)
             print(f"remark_name={remark_name}, isbot=False, content={cmsg.content}")
             self.produce(context)
 

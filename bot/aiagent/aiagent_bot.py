@@ -9,8 +9,8 @@ class AIAgentBot(Bot):
     def reply(self, query, context=None):
         try: 
             url = "http://47.95.21.135:8014/chat"
-            # data = {"user_id": context.getUserId(), "query": query}
-            data = {"user_id": "邵琦", "query": query}
+            data = {"user_id": context.getRemarkName(), "query": query}
+            # data = {"user_id": "邵琦", "query": query}
             response = requests.post(url, json=data)
             print("Chat Response:", response.json()["response"])
             return Reply(ReplyType.TEXT, response.json()["response"])

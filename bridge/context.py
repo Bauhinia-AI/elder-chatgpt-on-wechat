@@ -29,11 +29,11 @@ class Context:
         self.content = content
         self.kwargs = kwargs
     
-    def setUserId(self, user_id):
-        self.kwargs["user_id"] = user_id
+    def setRemarkName(self, user_id):
+        self.kwargs["remark_name"] = user_id
     
-    def getUserId(self):
-        return self.kwargs.get("user_id", None)
+    def getRemarkName(self):
+        return self.kwargs.get("remark_name", None)
 
     def __contains__(self, key):
         if key == "type":
